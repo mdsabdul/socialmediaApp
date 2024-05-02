@@ -16,6 +16,10 @@ router.get('/register', async function(req, res, next) {
 
   res.render('register');
 });
+router.get('/profile', async function(req, res, next) {
+
+  res.render('profile');
+});
 router.post('/register-user', async function(req, res, next) {
 try {
   const newUser =await userModel.create(req.body)
