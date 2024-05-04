@@ -9,6 +9,15 @@ var usersRouter = require('./routes/users');
 
 const db = require("./user/connect")
 
+// passport/session
+const passport = require("passport");
+const session = require("express-session");
+
+const User = require("./user/userSchema");
+
+
+
+
 
 var app = express();
 
@@ -21,6 +30,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(
+  session({
+      saveUninitialized: true,
+      resave: true,
+      secret: "asdhbcfkjf",
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

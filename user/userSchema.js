@@ -1,4 +1,9 @@
 const mongoose = require("mongoose")
+const passport = require("passport")
+const passportlocal = require("passport-local")
+
+
+const plm = require("passport-local-mongoose")
 const { stringify } = require("postcss")
 const userSchema = new mongoose.Schema({
     name:{
@@ -30,6 +35,6 @@ const userSchema = new mongoose.Schema({
 },
 {timestamps:true}
 );
-
+userSchema.plugin(plm)
 const upload = mongoose.model("usermodel",userSchema)
-module.exports = upload;
+module.exports = upload

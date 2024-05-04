@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 const userModel = require("../user/userSchema")
 
+// const User = require("../models/usermodel");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+passport.use(new LocalStrategy(userModel.authenticate()));
+ 
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index');
@@ -22,7 +29,9 @@ router.get('/profile', async function(req, res, next) {
 });
 router.post('/register-user', async function(req, res, next) {
 try {
-  const newUser =await userModel.create(req.body)
+  const {username,name , password ,email} = req.body
+await userModel.register({name,username,email},password)
+  // const newUser =await userModel.create(req.body)
 // await newUser.save;
   res.redirect('/login');
 } catch (error) {
