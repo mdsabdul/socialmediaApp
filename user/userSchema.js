@@ -1,40 +1,43 @@
-const mongoose = require("mongoose")
-const passport = require("passport")
-const passportlocal = require("passport-local")
+const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
-
-const plm = require("passport-local-mongoose")
-const { stringify } = require("postcss")
 const userSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        trim:true,
-        required:[true , "name is required"],
-        minLength:[4,"name should be atleast four character long"]
+    profilepic: {
+        type: String,
+        default: "default.png"
     },
-    username:{
-        type:String,
-        trim:true,
-        unique:true,
-        required:[true, "username is required"],
-        minLength:[4,"username should be atleast four character long"]
+    name: {
+        type: String,
+        trim: true,
+        required: [true, "Name is required"],
+        minLength: [4, "Name should be at least four characters long"]
     },
-
-    email:{
-        type:String,
-        trim:true,
-        unique:true,
-        lowercase:true,
-        required:[true , "emmail is required"],
-        minLength:[4,"email should be atleast four character long"],
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please fill a valid email address" ],
+    username: {
+        type: String,
+        trim: true,
+        unique: true,
+        required: [true, "Username is required"],
+        minLength: [4, "Username should be at least four characters long"]
     },
-    password:String,
+    email: {
+        type: String,
+        trim: true,
+        unique: true,
+        lowercase: true,
+        required: [true, "Email is required"],
+        minLength: [4, "Email should be at least four characters long"],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please fill a valid email address"],
+    },
+    password: String,
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
+    resetPasswordToken: {
+        type: Number,
+        default: 0,
+    },
+}, { timestamps: true });
 
+userSchema.plugin(passportLocalMongoose);
 
-},
-{timestamps:true}
-);
-userSchema.plugin(plm)
-const upload = mongoose.model("usermodel",userSchema)
-module.exports = upload
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;

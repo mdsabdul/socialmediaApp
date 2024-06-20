@@ -1,0 +1,13 @@
+<%- include("./partials/header")%>
+
+<%- include("./partials/nav")%>
+<div class="flex justify-center items-center flex-col">
+    <h1 class="bg-red-200 text-center text-[2vw] text-red-600 font-[900] w-[40%] rounded-[10px] margin-auto p-3 mt-[2vw]" >create post </h1>
+    <form class="w-[35%]  " action="/postcreate" method="post" enctype="multipart/form-data">
+        <input type="file" name="media">
+        <input type="text" class="border p-2 rounded mt-2" name="title" placeholder="title"  >
+          <button class="mt-3 bg-green-400 p-2 rounded ">creae post</button>
+    </form>
+</div>
+</div>
+<%- include("./partials/footer")%>
