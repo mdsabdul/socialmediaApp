@@ -13,6 +13,7 @@ const postSchema = new mongoose.Schema(
             required: [true, "Media is required"],
         },
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Use "User" as the reference name
+        likes:[{type:mongoose.Schema.Types.ObjectId, ref:"User"}],
     },
     { timestamps: true }
 );

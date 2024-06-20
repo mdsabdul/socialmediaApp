@@ -1,0 +1,56 @@
+<%- include("./partials/header") %>
+    <%- include("./partials/nav") %>
+
+        <div class="flex justify-center items-center flex-col">
+          
+            <div class="flex flex-wrap">
+                <% if (posts && posts.length> 0) { %>
+                    <% posts.forEach((post)=> { %>
+                        <div class="card w-[23%] mr-5 mb-5">
+                            <div class="flex items-center mb-2">
+                                <% if (post.user) { %>
+                                    <img class="w-[7vh] h-[7vh] rounded-full object-cover"
+                                        src="/images/<%= post.user.profilepic %>" alt="">
+                                    <div class="ml-3">
+                                        <h1 class="text-xl font-bold">
+                                            <%= post.user.name %>
+                                        </h1>
+                                        <small class="text-zinc-600">
+                                            <%= post.createdAt.toLocaleTimeString() %> | <%=
+                                                    post.createdAt.toLocaleDateString() %>
+                                        </small>
+                                    </div>
+                                    <% } else { %>
+                                        <img class="w-[7vh] h-[7vh] rounded-full object-cover" src="/images/default.png"
+                                            alt="">
+                                        <div class="ml-3">
+                                            <h1 class="text-xl font-bold">Unknown User</h1>
+                                            <small class="text-zinc-600">
+                                                <%= post.createdAt.toLocaleTimeString() %> | <%=
+                                                        post.createdAt.toLocaleDateString() %>
+                                            </small>
+                                        </div>
+                                        <% } %>
+                            </div>
+                            <img class="w-[30vw] h-[40vh] object-cover-center" src="/images/<%= post.media %>" alt="">
+                            <div class="text-[1.5vw] flex gap-[20px]">
+                              
+                                <a href="/deletepost/<%=post._id%>">
+
+                                        <i class="ri-delete-bin-line"></i>
+
+                                </a>
+                                <a href="/updatepost"><i class="ri-sip-line"></i></a>
+                            </div>
+
+                        </div>
+                        <% }) %>
+
+                            <% } else { %>
+                                <p>No posts found</p>
+                                <% } %>
+            </div>
+
+        </div>
+
+        <%- include("./partials/footer") %>

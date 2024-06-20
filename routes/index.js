@@ -8,6 +8,7 @@ const upload = require("../utils/multer");
 const sendmail = require("../utils/mail");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const { count } = require('console');
 passport.use(new LocalStrategy(User.authenticate()));
 
 // Middleware to check if user is authenticated
@@ -27,7 +28,7 @@ router.get('/login', function (req, res, next) {
   res.render('login', { user: req.user });
 });
 
-router.get('/logout-user/:id', function (req, res, next) {
+router.get('/logout-user/:id', isLoggedIn, function (req, res, next) {
   req.logOut(() => {
     res.redirect("/login");
   });
@@ -45,6 +46,23 @@ router.get('/about', function (req, res, next) {
 router.get('/register', function (req, res, next) {
   res.render('register', { user: req.user });
 });
+router.get('/timeline',async function (req, res, next) {
+  try {
+    const posts = await Post.find().populate("user");
+    // console.log("Fetched Posts:", posts); // Debug log
+    const _id =req.user.id
+    res.render('timeline', { user: req.user, posts,_id });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.send(error);
+  }
+});
+
+router.get("/deletepost/:postid",async function(req,res,next){
+ const  posts = Post.findById(req.params.postid)
+await Post.findByIdAndDelete(req.params.postid)
+res.render("timeline",{user:req.user,posts})
+})
 
 router.post('/register-user', async function (req, res, next) {
   try {
@@ -60,7 +78,7 @@ router.get('/profile', isLoggedIn, async function (req, res, next) {
   try {
     const posts = await Post.find().populate("user");
     console.log("Fetched Posts:", posts); // Debug log
-    res.render('profile', { user: req.user, posts });
+    res.render('profile', { user: req.user, posts, });
   } catch (error) {
     console.error("Error fetching posts:", error);
     res.send(error);
@@ -123,6 +141,19 @@ router.get("/userupdate/:id", isLoggedIn, function (req, res, next) {
   res.render("userupdate", { user: req.user });
 });
 
+router.post("/update-user/:id", async function (req, res, next) {
+  try {
+    const updateddata = { ...req.body }
+    await User.findByIdAndUpdate(req.params.id, req.body)
+
+    res.redirect(`/userupdate/${req.user._id}`)
+  } catch (error) {
+
+  }
+})
+
+
+
 router.post("/image/:id", isLoggedIn, upload.single("profilepic"), async function (req, res, next) {
   try {
     if (req.user.profilepic !== "default.png") {
@@ -168,5 +199,25 @@ router.post("/postcreate", isLoggedIn, upload.single("media"), async function (r
     res.send(error);
   }
 });
+
+
+router.get("/likes/:postid", async function (req, res, next) {
+  try {
+    let count = 0;
+    const post = await Post.findById(req.params.postid)
+
+    if(post.likes.includes(req.user._id)) {
+      post.likes = post.likes.filter((uid) => uid != req.user.id);
+
+    } else {
+      post.likes.push(req.user._id);
+      count+=1;
+    }
+    await post.save();
+    res.redirect("/profile");
+  } catch (error) {
+    res.send(error)
+  }
+})
 
 module.exports = router;
