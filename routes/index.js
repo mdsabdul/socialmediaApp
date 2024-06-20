@@ -67,7 +67,7 @@ res.render("timeline",{user:req.user,posts})
 router.post('/register-user', async function (req, res, next) {
   try {
     const { username, name, password, email } = req.body;
-    await User.register({ name, username, email }, password);
+    await new User.register({ name, username, email }, password);
     res.redirect('/login');
   } catch (error) {
     res.send(error.message);
