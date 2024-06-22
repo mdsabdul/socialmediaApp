@@ -85,24 +85,24 @@ router.get('/profile', isLoggedIn, async function (req, res, next) {
   }
 });
 
-router.get("/forget-email", function (req, res, next) {
-  res.render("user-forget-email", { user: req.user });
-});
+// router.get("/forget-email", function (req, res, next) {
+//   res.render("user-forget-email", { user: req.user });
+// });
 
-router.post("/forget-email", async function (req, res, next) {
-  try {
-    const user = await User.findOne({ email: req.body.email });
-    if (user) {
-      const url = `${req.protocol}://${req.get("host")}/forget-password/${user._id}`;
-      sendmail(res, user, url);
-      res.redirect(`/forget-password/${user._id}`);
-    } else {
-      res.redirect("/forget-email");
-    }
-  } catch (error) {
-    res.send(error);
-  }
-});
+// router.post("/forget-email", async function (req, res, next) {
+//   try {
+//     const user = await User.findOne({ email: req.body.email });
+//     if (user) {
+//       const url = `${req.protocol}://${req.get("host")}/forget-password/${user._id}`;
+//       sendmail(res, user, url);
+//       res.redirect(`/forget-password/${user._id}`);
+//     } else {
+//       res.redirect("/forget-email");
+//     }
+//   } catch (error) {
+//     res.send(error);
+//   }
+// });
 
 router.get("/forget-password/:id", function (req, res, next) {
   res.render("user-forget-password", { user: req.user, id: req.params.id });
