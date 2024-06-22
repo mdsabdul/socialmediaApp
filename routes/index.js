@@ -9,7 +9,7 @@ const sendmail = require("../utils/mail");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const { count } = require('console');
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(User.createStrategy());
 
 // Middleware to check if user is authenticated
 function isLoggedIn(req, res, next) {
@@ -67,7 +67,7 @@ res.render("timeline",{user:req.user,posts})
 router.post('/register-user', async function (req, res, next) {
   try {
     const { username, name, password, email } = req.body;
-    await new User.register({ name, username, email }, password);
+    await  User.register({ name, username, email }, password);
     res.redirect('/login');
   } catch (error) {
     res.send(error.message);
@@ -203,7 +203,7 @@ router.post("/postcreate", isLoggedIn, upload.single("media"), async function (r
 
 router.get("/likes/:postid", async function (req, res, next) {
   try {
-    let count = 0;
+    
     const post = await Post.findById(req.params.postid)
 
     if(post.likes.includes(req.user._id)) {
@@ -211,7 +211,7 @@ router.get("/likes/:postid", async function (req, res, next) {
 
     } else {
       post.likes.push(req.user._id);
-      count+=1;
+      
     }
     await post.save();
     res.redirect("/profile");
