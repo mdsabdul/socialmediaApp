@@ -207,7 +207,7 @@ router.get("/likes/:postid", async function (req, res, next) {
     const post = await Post.findById(req.params.postid)
 
     if(post.likes.includes(req.user._id)) {
-      post.likes = post.likes.filter((uid) => uid != req.user.id);
+      post.likes = post.likes.filter((uid) => uid != req.user._id);
 
     } else {
       post.likes.push(req.user._id);

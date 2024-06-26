@@ -1,71 +1,64 @@
 <%- include("./partials/header") %>
-  <%- include("./partials/nav") %>
+<%- include("./partials/nav") %>
 
-    <div class="flex justify-center items-center flex-col">
-      <h1
-        class="bg-red-200 text-center text-[2vw] text-red-600 font-[900] w-[40%] rounded-[10px] margin-auto py-[1vw] mt-5">
-        User Profile</h1>
-      <div class="flex flex-wrap">
-        <% if (posts && posts.length> 0) { %>
-          <% posts.forEach((post)=> { %>
-            <div class="card w-[23%] mr-5 mb-5">
-              <div class="flex items-center mb-2">
-                <% if (post.user) { %>
-                  <img class="w-[7vh] h-[7vh] rounded-full object-cover" src="/images/<%= post.user.profilepic %>"
-                    alt="">
-                  <div class="ml-3">
-                    <h1 class="text-xl font-bold">
-                      <%= post.user.name %>
-                    </h1>
-                    <small class="text-zinc-600">
-                      <%= post.createdAt.toLocaleTimeString() %> | <%= post.createdAt.toLocaleDateString() %>
-                    </small>
-                  </div>
-                  <% } else { %>
-                    <img class="w-[7vh] h-[7vh] rounded-full object-cover" src="/images/default.png" alt="">
-                    <div class="ml-3">
-                      <h1 class="text-xl font-bold">Unknown User</h1>
-                      <small class="text-zinc-600">
-                        <%= post.createdAt.toLocaleTimeString() %> | <%= post.createdAt.toLocaleDateString() %>
-                      </small>
-                    </div>
-                    <% } %>
+<div class="flex flex-col items-center px-2 sm:px-4 md:px-8 lg:px-16 xl:px-32">
+  <h1 class="bg-red-200 text-center text-[8vw] sm:text-[6vw] md:text-[4vw] lg:text-[3vw] xl:text-[2vw] text-red-600 font-bold w-[90%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[40%] rounded-[10px] py-[4vw] sm:py-[3vw] md:py-[2vw] lg:py-[1.5vw] xl:py-[1vw] mt-5">
+    User Profile
+  </h1>
+  <div class="flex flex-wrap justify-center">
+    <% if (posts && posts.length > 0) { %>
+      <% posts.forEach((post) => { %>
+        <div class="card w-full sm:w-[45%] md:w-[30%] lg:w-[23%] mr-2 sm:mr-4 md:mr-5 mb-4 sm:mb-6 md:mb-8 lg:mb-10">
+          <div class="flex items-center mb-2">
+            <% if (post.user) { %>
+              <img class="w-[10vh] h-[10vh] sm:w-[7vh] sm:h-[7vh] md:w-[6vh] md:h-[6vh] lg:w-[5vh] lg:h-[5vh] rounded-full object-cover" src="/images/<%= post.user.profilepic %>" alt="Profile Picture">
+              <div class="ml-3">
+                <h1 class="text-lg sm:text-xl font-bold">
+                  <%= post.user.name %>
+                </h1>
+                <small class="text-zinc-600">
+                  <%= post.createdAt.toLocaleTimeString() %> | <%= post.createdAt.toLocaleDateString() %>
+                </small>
               </div>
-              <img class="w-[30vw] h-[40vh] object-cover-center" src="/images/<%= post.media %>" alt="">
-              <div>
-                <span class="text-md mr-2">
-                  <%= post.likes.length%>
-                </span>
-                <a href="/likes/<%=post._id%>">
-
-                  <% if(post.likes.includes(user._id)) { %>
-
-                    <i class="text-red-300 ri-heart-3-fill"></i>
-
-                    <% } else { %>
-                      <i class="ri-heart-3-line"></i>
-
-                      <% } %>
-                </a>
-                <i class="ri-wechat-2-line"></i>
+            <% } else { %>
+              <img class="w-[10vh] h-[10vh] sm:w-[7vh] sm:h-[7vh] md:w-[6vh] md:h-[6vh] lg:w-[5vh] lg:h-[5vh] rounded-full object-cover" src="/images/default.png" alt="Default Profile Picture">
+              <div class="ml-3">
+                <h1 class="text-lg sm:text-xl font-bold">Unknown User</h1>
+                <small class="text-zinc-600">
+                  <%= post.createdAt.toLocaleTimeString() %> | <%= post.createdAt.toLocaleDateString() %>
+                </small>
               </div>
-             
-            </div>
-            <% }) %>
-
+            <% } %>
+          </div>
+          <img class="w-full object-cover" style="height: auto;" src="/images/<%= post.media %>" alt="Post Image">
+          <div class="flex items-center justify-between mt-2">
+            <span class="text-md mr-2">
+              <%= post.likes.length %>
+            </span>
+            <a href="/likes/<%= post._id %>">
+              <% if (post.likes.includes(user._id)) { %>
+                <i class="text-red-300 ri-heart-3-fill"></i>
               <% } else { %>
-                <p>No posts found</p>
-                <% } %>
-      </div>
-      <div class="flex align-bottom h-[100%]">
-        <div class="m-auto justify-between items-center flex w-[20vw] p-3 bg-green-400 rounded">
-          <i class="ri-search-line text-4xl"></i>
-          <a href="/postcreate"><i class="ri-add-line text-4xl"></i></a>
-          <a href="/userupdate/<%= user._id %>">
-            <img class="h-[1.8vw] rounded-full" src="/images/default.png" alt="">
-          </a>
+                <i class="ri-heart-3-line"></i>
+              <% } %>
+            </a>
+            <i class="ri-wechat-2-line"></i>
+          </div>
         </div>
-      </div>
+      <% }) %>
+    <% } else { %>
+      <p>No posts found</p>
+    <% } %>
+  </div>
+  <div class="flex align-bottom w-full mt-5">
+    <div class="m-auto flex justify-around items-center w-[90vw] sm:w-[60vw] md:w-[40vw] lg:w-[30vw] xl:w-[20vw] p-3 bg-green-400 rounded">
+      <i class="ri-search-line text-4xl"></i>
+      <a href="/postcreate"><i class="ri-add-line text-4xl"></i></a>
+      <a href="/userupdate/<%= user._id %>">
+        <img class="h-[5vw] sm:h-[3.5vw] md:h-[2.5vw] lg:h-[2vw] xl:h-[1.8vw] rounded-full" src="/images/default.png" alt="User Profile Update">
+      </a>
     </div>
+  </div>
+</div>
 
-    <%- include("./partials/footer") %>
+<%- include("./partials/footer") %>
