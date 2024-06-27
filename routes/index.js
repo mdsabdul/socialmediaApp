@@ -46,28 +46,50 @@ router.get('/about', function (req, res, next) {
 router.get('/register', function (req, res, next) {
   res.render('register', { user: req.user });
 });
-router.get('/timeline',async function (req, res, next) {
+router.get('/timeline', async function (req, res, next) {
   try {
     const posts = await Post.find().populate("user");
     // console.log("Fetched Posts:", posts); // Debug log
-    const _id =req.user.id
-    res.render('timeline', { user: req.user, posts,_id });
+    const _id = req.user.id
+    res.render('timeline', { user: req.user, posts, _id });
   } catch (error) {
     console.error("Error fetching posts:", error);
     res.send(error);
   }
 });
 
-router.get("/deletepost/:postid",async function(req,res,next){
- const  posts = Post.findById(req.params.postid)
-await Post.findByIdAndDelete(req.params.postid)
-res.redirect("/timeline")
+
+
+router.get("/deletepost/:postid",isLoggedIn, async function (req, res, next) {
+  const posts = Post.findById(req.params.postid)
+  await Post.findByIdAndDelete(req.params.postid)
+  res.redirect("/timeline")
+})
+
+router.get("/postupdate/:postid",isLoggedIn, async function (req, res, next) {
+  try {
+    const posts = await Post.findById(req.params.postid)
+    const postid = req.params.postid
+    res.render("postupdate", { posts, user: req.user,postid })
+  } catch (error) {
+    res.send(error)
+  }
+})
+
+router.post("/postupdate/:postid",isLoggedIn, upload.single("media"), async function(req,res,next){
+  const updatedpost = req.body
+  if(req.file){
+    updatedpost.media = req.file.filename
+  }
+  await Post.findByIdAndUpdate(req.params.postid,updatedpost)
+
+  res.redirect("/timeline")
 })
 
 router.post('/register-user', async function (req, res, next) {
   try {
     const { username, name, password, email } = req.body;
-    await  User.register({ name, username, email }, password);
+    await User.register({ name, username, email }, password);
     res.redirect('/login');
   } catch (error) {
     res.send(error.message);
@@ -203,15 +225,15 @@ router.post("/postcreate", isLoggedIn, upload.single("media"), async function (r
 
 router.get("/likes/:postid", async function (req, res, next) {
   try {
-    
+
     const post = await Post.findById(req.params.postid)
 
-    if(post.likes.includes(req.user._id)) {
+    if (post.likes.includes(req.user._id)) {
       post.likes = post.likes.filter((uid) => uid != req.user._id);
 
     } else {
       post.likes.push(req.user._id);
-      
+
     }
     await post.save();
     res.redirect("/profile");
