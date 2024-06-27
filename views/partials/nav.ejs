@@ -1,14 +1,10 @@
-<nav class=" flex justify-center gap-10 py-4 text-white text-[1.3vw] font-[600] " >
+<nav class="flex justify-center gap-10 py-4 text-white text-base font-semibold md:text-lg lg:text-xl">
     <% if(user){ %>
-        <a class="hover:underline text-red-500" href="/profile">Home</a> 
-        <a class="hover:underline text-red-500" href="/timeline">Timeline</a> 
-   <% }else{%>
-        <a class="hover:underline text-red-500" href="/">Home</a> 
+        <a class="hover:underline text-red-500" href="/profile">Home</a>
+        <a class="hover:underline text-red-500" href="/timeline">Timeline</a>
+    <% } else { %>
+        <a class="hover:underline text-red-500" href="/">Home</a>
         <a class="hover:underline text-red-500" href="/login">Login</a>
-  <%  }%>
-    <!-- <a class="hover:underline text-red-500" href="/">Home</a> -->
-    <!-- <a class="hover:underline text-red-500" href="/login">Login</a> -->
+    <% } %>
     <a class="hover:underline text-red-500" href="/about">About Us</a>
-    <!-- <a class="hover:underline text-red-500" href="/logout-user">Logout</a> -->
-
 </nav>

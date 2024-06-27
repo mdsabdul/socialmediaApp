@@ -61,7 +61,7 @@ router.get('/timeline',async function (req, res, next) {
 router.get("/deletepost/:postid",async function(req,res,next){
  const  posts = Post.findById(req.params.postid)
 await Post.findByIdAndDelete(req.params.postid)
-res.render("timeline",{user:req.user,posts})
+res.redirect("/timeline")
 })
 
 router.post('/register-user', async function (req, res, next) {
